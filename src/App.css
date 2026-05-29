@@ -1,0 +1,179 @@
+import { useEffect, useState } from "react";
+
+/*
+  FocusForge Pro (Working Version)
+  - No external UI libraries (fully runnable)
+  - Simple SaaS-style structure
+*/
+
+export default function App() {
+  const [user, setUser] = useState(null);
+  const [email, setEmail] = useState("");
+
+  const [tasks, setTasks] = useState([]);
+  const [task, setTask] = useState("");
+
+  const [time, setTime] = useState(1500);
+  const [active, setActive] = useState(false);
+
+  const [isPremium, setIsPremium] = useState(false);
+
+  useEffect(() => {
+    let timer;
+    if (active && time > 0) {
+      timer = setInterval(() => setTime(t => t - 1), 1000);
+    }
+    return () => clearInterval(timer);
+  }, [active, time]);
+
+  const login = () => {
+    if (!email.trim()) return;
+    setUser({ email });
+  };
+
+  const logout = () => {
+    setUser(null);
+    setIsPremium(false);
+  };
+
+  const subscribe = () => {
+    // fake payment flow (replace with Stripe later)
+    alert("Redirecting to payment (£2.99/month)...");
+    setTimeout(() => setIsPremium(true), 800);
+  };
+
+  const addTask = () => {
+    if (!task.trim()) return;
+    setTasks([...tasks, { text: task, done: false }]);
+    setTask("");
+  };
+
+  const toggleTask = (i) => {
+    const updated = [...tasks];
+    updated[i].done = !updated[i].done;
+    setTasks(updated);
+  };
+
+  const formatTime = (t) => {
+    const m = Math.floor(t / 60);
+    const s = t % 60;
+    return `${m}:${s.toString().padStart(2, "0")}`;
+  };
+
+  // LOGIN SCREEN
+  if (!user) {
+    return (
+      <div style={styles.center}>
+        <div style={styles.card}>
+          <h1>FocusForge Pro</h1>
+          <p>Login to continue</p>
+          <input
+            style={styles.input}
+            placeholder="Enter email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+          />
+          <button style={styles.button} onClick={login}>
+            Login
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div style={styles.page}>
+      <div style={styles.header}>
+        <div>
+          <h1>FocusForge Pro</h1>
+          <p>Welcome, {user.email}</p>
+        </div>
+        <button style={styles.button} onClick={logout}>Logout</button>
+      </div>
+
+      {/* Subscription */}
+      <div style={styles.card}>
+        <h2>Subscription</h2>
+        <p>{isPremium ? "Premium Active (£2.99/month)" : "Free Plan"}</p>
+        {!isPremium ? (
+          <button style={styles.button} onClick={subscribe}>
+            Subscribe £2.99/month
+          </button>
+        ) : (
+          <button style={styles.button} onClick={() => setIsPremium(false)}>
+            Cancel
+          </button>
+        )}
+      </div>
+
+      <div style={styles.grid}>
+        {/* Tasks */}
+        <div style={styles.card}>
+          <h2>To-Do List</h2>
+          <input
+            style={styles.input}
+            value={task}
+            onChange={(e) => setTask(e.target.value)}
+            placeholder="Add task"
+          />
+          <button style={styles.button} onClick={addTask}>Add</button>
+
+          {tasks.map((t, i) => (
+            <div
+              key={i}
+              onClick={() => toggleTask(i)}
+              style={{
+                padding: "8px",
+                marginTop: "6px",
+                background: t.done ? "#b6fcb6" : "#fff",
+                cursor: "pointer"
+              }}
+            >
+              {t.text}
+            </div>
+          ))}
+        </div>
+
+        {/* Timer */}
+        <div style={styles.card}>
+          <h2>Pomodoro</h2>
+          <h1 style={{ fontSize: "40px" }}>{formatTime(time)}</h1>
+          <button style={styles.button} onClick={() => setActive(true)}>Start</button>
+          <button style={styles.button} onClick={() => setActive(false)}>Pause</button>
+          <button style={styles.button} onClick={() => setTime(1500)}>Reset</button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+const styles = {
+  page: { fontFamily: "Arial", padding: 20, background: "#eef" },
+  center: { display: "flex", height: "100vh", justifyContent: "center", alignItems: "center", background: "#eef" },
+  card: { background: "white", padding: 20, margin: 10, borderRadius: 10 },
+  grid: { display: "grid", gridTemplateColumns: "1fr 1fr", gap: 20 },
+  input: { padding: 10, margin: "10px 0", width: "100%" },
+  button: { padding: 10, margin: 5, cursor: "pointer" },
+  header: { display: "flex", justifyContent: "space-between", alignItems: "center" }
+};
+
+import { initializeApp } from "firebase/app";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyDA8_uel1rO_JxZ53EIruazVOwlEt16GuU",
+  authDomain: "focusforge-9f797.firebaseapp.com",
+  projectId: "focusforge-9f797",
+  storageBucket: "focusforge-9f797.firebasestorage.app",
+  messagingSenderId: "83327552791",
+  appId: "1:83327552791:web:1b23680649f6e535973b52"
+};
+
+const app = initializeApp(firebaseConfig);
+
+export default app;
+
+import { loadStripe } from "@stripe/stripe-js";
+
+export const stripePromise = loadStripe(
+  "mk_1TcNaNDsXgTcZ1JbRc6Ljosz"
+);
