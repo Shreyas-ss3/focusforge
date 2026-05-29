@@ -1,4 +1,61 @@
 body {
   margin: 0;
   font-family: Arial;
+  background: #0f172a;
+  color: white;
+}
+
+.center {
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.app {
+  padding: 20px;
+}
+
+.topbar {
+  display: flex;
+  justify-content: space-between;
+  padding: 15px;
+  background: #111827;
+  border-radius: 10px;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 15px;
+  margin-top: 20px;
+}
+
+.card {
+  background: #1f2937;
+  padding: 15px;
+  border-radius: 12px;
+}
+
+input {
+  width: 100%;
+  padding: 10px;
+  margin: 10px 0;
+}
+
+button {
+  padding: 10px;
+  margin-right: 5px;
+  cursor: pointer;
+  background: #3b82f6;
+  border: none;
+  color: white;
+  border-radius: 6px;
+}
+
+.task {
+  background: #111827;
+  padding: 8px;
+  margin-top: 5px;
+  border-radius: 6px;
 }
