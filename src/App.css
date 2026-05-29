@@ -59,3 +59,42 @@ button {
   margin-top: 5px;
   border-radius: 6px;
 }
+body {
+  margin: 0;
+  font-family: Arial;
+  background: #0f172a;
+  color: white;
+}
+
+.center {
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.card {
+  background: #1e293b;
+  padding: 20px;
+  border-radius: 12px;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 20px;
+  padding: 20px;
+}
+
+.topbar {
+  display: flex;
+  justify-content: space-between;
+  padding: 20px;
+  background: #111827;
+}
+
+button {
+  padding: 10px;
+  margin-top: 10px;
+  cursor: pointer;
+}
