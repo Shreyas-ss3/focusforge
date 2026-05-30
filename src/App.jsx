@@ -69,7 +69,7 @@ function Dashboard({ user }) {
   };
 
   const upgrade = async () => {
-    const res = await fetch("http://localhost:4242/create-checkout-session", {
+    const res = await fetch("fetch("https://focusforge-backend-ixod.onrender.com/")", {
       method: "POST",
     });
 
